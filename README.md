@@ -4,6 +4,7 @@ This is a Spring Boot application that implements a trading platform with trader
 
 ## Features
 
+### Trading Platform
 The trading platform provides the following REST endpoints:
 
 ### 1. Register a New Trader
@@ -34,13 +35,24 @@ The trading platform provides the following REST endpoints:
 - Returns HTTP 200 on success, 404 if not found
 - Request body: `{"email": "trader@example.com", "amount": 50.0}`
 
+### FizzBuzz Controller Advice
+The application also includes a FizzBuzz controller with global exception handling:
+
+- **GET** `/controller_advice/{code}` - FizzBuzz endpoint that throws exceptions based on the code parameter
+  - `fizz` → throws FizzException (HTTP 500)
+  - `buzz` → throws BuzzException (HTTP 400)  
+  - `fizzbuzz` → throws FizzBuzzException (HTTP 507)
+  - `success` → returns success response (HTTP 200)
+  - Any other code → returns default response (HTTP 200)
+
 ## Technical Details
 
 - **Database**: H2 in-memory database (for demo purposes)
 - **JPA**: Spring Data JPA with Hibernate
-- **Security**: Spring Security configured to allow access to `/trading/**` endpoints
+- **Security**: Spring Security configured to allow access to `/trading/**` and `/controller_advice/**` endpoints
 - **Timezone**: UTC (as required by the assignment)
 - **Data Validation**: Automatic validation for duplicate emails and non-existent traders
+- **Exception Handling**: Global exception handler with custom error responses
 
 ## Running the Application
 
@@ -76,6 +88,25 @@ The `traders` table contains:
 
 ## Example Usage
 
+### FizzBuzz Controller Advice
+```bash
+# Test FizzException (HTTP 500)
+curl http://localhost:8080/controller_advice/fizz
+
+# Test BuzzException (HTTP 400)
+curl http://localhost:8080/controller_advice/buzz
+
+# Test FizzBuzzException (HTTP 507)
+curl http://localhost:8080/controller_advice/fizzbuzz
+
+# Test Success Response (HTTP 200)
+curl http://localhost:8080/controller_advice/success
+
+# Test Default Response (HTTP 200)
+curl http://localhost:8080/controller_advice/other
+```
+
+### Trading Platform
 ### Register a Trader
 ```bash
 curl -X POST http://localhost:8080/trading/traders/register \

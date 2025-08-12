@@ -15,7 +15,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/trading/**").permitAll()
+                .requestMatchers("/trading/**", "/controller_advice/**").permitAll()
                 .anyRequest().authenticated()
             );
         
